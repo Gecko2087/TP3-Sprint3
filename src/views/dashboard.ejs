@@ -6,96 +6,73 @@
   <title>Dashboard de Superhéroes</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    /* Estilos personalizados */
     body {
       font-family: 'Inter', sans-serif;
     }
   </style>
 </head>
-<body class="bg-gray-900 text-white flex flex-col min-h-screen">
-  <!-- Encabezado -->
-  <header class="bg-gray-800 py-4">
-    <div class="container mx-auto px-4 flex justify-between items-center">
-      <a href="/api/heroes" class="text-2xl font-semibold text-white hover:text-gray-300">Lista de Superhéroes</a>
+<body class="bg-gray-900 text-white">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-semibold mb-6">Lista de Superhéroes</h1>
+    <div class="mb-4">
       <a href="/api/heroes/agregar" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Agregar Superhéroe</a>
     </div>
-  </header>
-
-  <!-- Contenido principal -->
-  <main class="flex-grow">
-    <div class="container mx-auto px-4 py-8">
-      <div class="overflow-x-auto">
-        <table class="min-w-full bg-gray-800 rounded-lg">
-          <thead>
-            <tr class="w-full bg-gray-700 text-left text-xs font-semibold uppercase tracking-wider">
-              <th class="px-4 py-3">Nombre</th>
-              <th class="px-4 py-3">Nombre Real</th>
-              <th class="px-4 py-3">Edad</th>
-              <th class="px-4 py-3">Planeta de Origen</th>
-              <th class="px-4 py-3">Debilidad</th>
-              <th class="px-4 py-3">Poderes</th>
-              <th class="px-4 py-3">Aliados</th>
-              <th class="px-4 py-3">Enemigos</th>
-              <th class="px-4 py-3">Acciones</th>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-gray-800 rounded-lg">
+        <thead>
+          <tr class="w-full bg-gray-700 text-left text-xs font-semibold uppercase tracking-wider">
+            <th class="px-4 py-3">Nombre</th>
+            <th class="px-4 py-3">Nombre Real</th>
+            <th class="px-4 py-3">Edad</th>
+            <th class="px-4 py-3">Planeta de Origen</th>
+            <th class="px-4 py-3">Debilidad</th>
+            <th class="px-4 py-3">Poderes</th>
+            <th class="px-4 py-3">Aliados</th>
+            <th class="px-4 py-3">Enemigos</th>
+            <th class="px-4 py-3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-700">
+          <% superheroes.forEach(superheroe => { %>
+            <tr class="hover:bg-gray-700">
+              <td class="px-4 py-3"><%= superheroe.nombreSuperHeroe %></td>
+              <td class="px-4 py-3"><%= superheroe.nombreReal %></td>
+              <td class="px-4 py-3"><%= superheroe.edad %></td>
+              <td class="px-4 py-3"><%= superheroe.planetaOrigen %></td>
+              <td class="px-4 py-3"><%= superheroe.debilidad || 'N/A' %></td>
+              <td class="px-4 py-3">
+                <% if (superheroe.poderes && superheroe.poderes.length > 0) { %>
+                  <%= superheroe.poderes.join(", ") %>
+                <% } else { %>
+                  N/A
+                <% } %>
+              </td>
+              <td class="px-4 py-3">
+                <% if (superheroe.aliados && superheroe.aliados.length > 0) { %>
+                  <%= superheroe.aliados.join(", ") %>
+                <% } else { %>
+                  N/A
+                <% } %>
+              </td>
+              <td class="px-4 py-3">
+                <% if (superheroe.enemigos && superheroe.enemigos.length > 0) { %>
+                  <%= superheroe.enemigos.join(", ") %>
+                <% } else { %>
+                  N/A
+                <% } %>
+              </td>
+              <td class="px-4 py-3 flex space-x-2">
+                <a href="/api/heroes/<%= superheroe._id %>/editar" class="text-yellow-400 hover:text-yellow-500">Editar</a>
+                <form action="/api/heroes/<%= superheroe._id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este superhéroe?')">
+                  <button type="submit" class="text-red-400 hover:text-red-500">Eliminar</button>
+                </form>
+              </td>
             </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-700">
-            <% superheroes.forEach(superheroe => { %>
-              <tr class="hover:bg-gray-700">
-                <td class="px-4 py-3"><%= superheroe.nombreSuperHeroe %></td>
-                <td class="px-4 py-3"><%= superheroe.nombreReal %></td>
-                <td class="px-4 py-3"><%= superheroe.edad %></td>
-                <td class="px-4 py-3"><%= superheroe.planetaOrigen %></td>
-                <td class="px-4 py-3"><%= superheroe.debilidad || 'N/A' %></td>
-                <td class="px-4 py-3">
-                  <% if (superheroe.poderes && superheroe.poderes.length > 0) { %>
-                    <%= superheroe.poderes.join(", ") %>
-                  <% } else { %>
-                    N/A
-                  <% } %>
-                </td>
-                <td class="px-4 py-3">
-                  <% if (superheroe.aliados && superheroe.aliados.length > 0) { %>
-                    <%= superheroe.aliados.join(", ") %>
-                  <% } else { %>
-                    N/A
-                  <% } %>
-                </td>
-                <td class="px-4 py-3">
-                  <% if (superheroe.enemigos && superheroe.enemigos.length > 0) { %>
-                    <%= superheroe.enemigos.join(", ") %>
-                  <% } else { %>
-                    N/A
-                  <% } %>
-                </td>
-                <td class="px-4 py-3 flex space-x-2">
-                  <a href="/api/heroes/<%= superheroe._id %>/editar" class="text-yellow-400 hover:text-yellow-500" aria-label="Editar">
-                    <!-- Icono de edición -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12l-3 3m0 0l-3-3m3 3V3m0 18l-3-3m3 3l3-3" />
-                    </svg>
-                  </a>
-                  <form action="/api/heroes/<%= superheroe._id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este superhéroe?')">
-                    <button type="submit" class="text-red-400 hover:text-red-500" aria-label="Eliminar">
-                      <!-- Icono de eliminación -->
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </form>
-                </td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      </div>
+          <% }); %>
+        </tbody>
+      </table>
     </div>
-  </main>
-
-  <!-- Pie de página -->
-  <footer class="bg-gray-800 py-4">
-    <div class="container mx-auto px-4 text-center text-sm text-gray-400">
-      &copy; <%= new Date().getFullYear() %> Dashboard de Superhéroes. Todos los derechos reservados.
-    </div>
-  </footer>
+  </div>
 </body>
 </html>
