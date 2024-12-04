@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Definimos el esquema para los superhéroes
 const superheroSchema = new mongoose.Schema({
   nombreSuperHeroe: {
     type: String,
@@ -23,18 +22,16 @@ const superheroSchema = new mongoose.Schema({
   },
   planetaOrigen: {
     type: String,
-    required: [true, "El planeta de origen es obligatorio"],
+    default: "Desconocido",
     trim: true,
-    minlength: [3, "El planeta de origen debe tener al menos 3 caracteres"],
-    maxlength: [60, "El planeta de origen no puede superar los 60 caracteres"],
   },
   debilidad: {
     type: String,
-    required: [true, "La debilidad es obligatoria"],
     trim: true,
+    required: [true, "Debe especificarse la debilidad del superhéroe"],
     minlength: [3, "La debilidad debe tener al menos 3 caracteres"],
     maxlength: [60, "La debilidad no puede superar los 60 caracteres"],
-  },  
+  },
   poderes: {
     type: [String],
     validate: {
@@ -54,8 +51,32 @@ const superheroSchema = new mongoose.Schema({
     },
     required: [true, "Debe tener al menos un poder"],
   },
-  aliados: [{ type: String, trim: true }],
-  enemigos: [{ type: String, trim: true }],
+  aliados: {
+    type: [String],
+    validate: {
+      validator: function (aliados) {
+        return aliados.every(
+          (a) =>
+            typeof a === "string" &&
+            (a.trim().length === 0 || (a.trim().length >= 3 && a.trim().length <= 60))
+        );
+      },
+      message: "Cada aliado debe ser un string de 3 a 60 caracteres o estar vacío",
+    },
+  },
+  enemigos: {
+    type: [String],
+    validate: {
+      validator: function (enemigos) {
+        return enemigos.every(
+          (e) =>
+            typeof e === "string" &&
+            (e.trim().length === 0 || (e.trim().length >= 3 && e.trim().length <= 60))
+        );
+      },
+      message: "Cada enemigo debe ser un string de 3 a 60 caracteres o estar vacío",
+    },
+  },
   createdAt: { type: Date, default: Date.now },
   createdBy: {
     type: String,
@@ -64,5 +85,4 @@ const superheroSchema = new mongoose.Schema({
   },
 });
 
-// Exportamos el modelo asociado a la colección "Grupo-14"
 export default mongoose.model("SuperHero", superheroSchema, "Grupo-14");
