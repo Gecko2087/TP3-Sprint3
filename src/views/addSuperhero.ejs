@@ -25,7 +25,7 @@
       </div>
     <% } %>
 
-    <form action="/api/heroes/agregar" method="POST" class="bg-gray-800 p-6 rounded-lg">
+    <form action="/api/heroes/agregar" method="POST" class="bg-gray-800 p-6 rounded-lg" onsubmit="return validarFormulario()">
       <div class="mb-4">
         <label for="nombreSuperHeroe" class="block text-sm font-medium">Nombre del Superhéroe</label>
         <input type="text" id="nombreSuperHeroe" name="nombreSuperHeroe" class="mt-1 p-2 block w-full bg-gray-700 rounded" required>
@@ -36,11 +36,11 @@
       </div>
       <div class="mb-4">
         <label for="edad" class="block text-sm font-medium">Edad</label>
-        <input type="number" id="edad" name="edad" class="mt-1 p-2 block w-full bg-gray-700 rounded" required min="0">
+        <input type="number" id="edad" name="edad" class="mt-1 p-2 block w-full bg-gray-700 rounded" required>
       </div>
       <div class="mb-4">
         <label for="planetaOrigen" class="block text-sm font-medium">Planeta de Origen</label>
-        <input type="text" id="planetaOrigen" name="planetaOrigen" class="mt-1 p-2 block w-full bg-gray-700 rounded" required>
+        <input type="text" id="planetaOrigen" name="planetaOrigen" class="mt-1 p-2 block w-full bg-gray-700 rounded">
       </div>
       <div class="mb-4">
         <label for="debilidad" class="block text-sm font-medium">Debilidad</label>
@@ -58,11 +58,41 @@
         <label for="enemigos" class="block text-sm font-medium">Enemigos (separados por comas)</label>
         <textarea id="enemigos" name="enemigos" class="mt-1 p-2 block w-full bg-gray-700 rounded"></textarea>
       </div>
-      <div class="flex justify-between">
-        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Agregar Superhéroe</button>
-        <a href="/api/heroes" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded">Volver al Dashboard</a>
-      </div>
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Agregar</button>
     </form>
+    <div class="mt-6">
+      <a href="/api/heroes" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Volver al Dashboard</a>
+    </div>
   </div>
+
+  <script>
+    function validarFormulario() {
+      const poderes = document.getElementById("poderes").value.split(",");
+      const aliados = document.getElementById("aliados").value.split(",");
+      const enemigos = document.getElementById("enemigos").value.split(",");
+      const debilidad = document.getElementById("debilidad").value.trim();
+
+      if (debilidad.length < 3 || debilidad.length > 60) {
+        alert("La debilidad debe tener entre 3 y 60 caracteres.");
+        return false;
+      }
+
+      const validarArray = (arr, campo) => {
+        for (let item of arr) {
+          if (item.trim().length > 0 && (item.trim().length < 3 || item.trim().length > 60)) {
+            alert(`Cada ${campo} debe tener entre 3 y 60 caracteres.`);
+            return false;
+          }
+        }
+        return true;
+      };
+
+      if (!validarArray(poderes, "poder")) return false;
+      if (!validarArray(aliados, "aliado")) return false;
+      if (!validarArray(enemigos, "enemigo")) return false;
+
+      return true;
+    }
+  </script>
 </body>
 </html>

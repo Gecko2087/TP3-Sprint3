@@ -25,7 +25,7 @@
       </div>
     <% } %>
 
-    <form action="/api/heroes/<%= superheroe._id %>/editar" method="POST" class="bg-gray-800 p-6 rounded-lg">
+    <form action="/api/heroes/<%= superheroe._id %>?_method=PUT" method="POST" class="bg-gray-800 p-6 rounded-lg">
       <div class="mb-4">
         <label for="nombreSuperHeroe" class="block text-sm font-medium">Nombre del Superhéroe</label>
         <input type="text" id="nombreSuperHeroe" name="nombreSuperHeroe" class="mt-1 p-2 block w-full bg-gray-700 rounded" value="<%= superheroe.nombreSuperHeroe %>" required>
@@ -40,11 +40,11 @@
       </div>
       <div class="mb-4">
         <label for="planetaOrigen" class="block text-sm font-medium">Planeta de Origen</label>
-        <input type="text" id="planetaOrigen" name="planetaOrigen" class="mt-1 p-2 block w-full bg-gray-700 rounded" value="<%= superheroe.planetaOrigen || '' %>" required>
+        <input type="text" id="planetaOrigen" name="planetaOrigen" class="mt-1 p-2 block w-full bg-gray-700 rounded" value="<%= superheroe.planetaOrigen %>" required>
       </div>
       <div class="mb-4">
         <label for="debilidad" class="block text-sm font-medium">Debilidad</label>
-        <input type="text" id="debilidad" name="debilidad" class="mt-1 p-2 block w-full bg-gray-700 rounded" value="<%= superheroe.debilidad || '' %>" required>
+        <input type="text" id="debilidad" name="debilidad" class="mt-1 p-2 block w-full bg-gray-700 rounded" value="<%= superheroe.debilidad %>" required>
       </div>
       <div class="mb-4">
         <label for="poderes" class="block text-sm font-medium">Poderes (separados por comas)</label>
@@ -59,8 +59,8 @@
         <textarea id="enemigos" name="enemigos" class="mt-1 p-2 block w-full bg-gray-700 rounded"><%= superheroe.enemigos.join(", ") %></textarea>
       </div>
       <div class="flex justify-between">
-        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Guardar cambios</button>
-        <a href="/api/heroes" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded">Volver al Dashboard</a>
+        <a href="/api/heroes" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Volver al Dashboard</a>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Actualizar</button>
       </div>
     </form>
   </div>

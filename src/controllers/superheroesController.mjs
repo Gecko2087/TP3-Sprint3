@@ -41,17 +41,17 @@ export async function crearSuperheroeController(req, res) {
   try {
     const superheroe = await crearSuperheroe(req.body);
 
-    // Redirigir al dashboard tras crear el superhéroe
-    res.redirect("/api/heroes?mensaje=Superhéroe creado con éxito");
+    // Redirigir al dashboard después de crear el superhéroe
+    res.redirect("/api/heroes");
   } catch (error) {
     if (error.name === "ValidationError") {
-      return res.render("addSuperhero", {
+      // Renderizar la vista con los errores si hay problemas de validación
+      return res.status(400).render("addSuperhero", {
         errores: Object.values(error.errors).map((e) => e.message),
-        superheroe: req.body, // Prellenar el formulario con los datos ingresados
+        superheroe: req.body, // Conservar los datos ingresados
       });
     }
-
-    res.status(500).send("Error interno del servidor");
+    res.status(500).json({ mensaje: "Error interno del servidor", error });
   }
 }
 
@@ -59,7 +59,19 @@ export async function crearSuperheroeController(req, res) {
 export async function actualizarSuperheroeController(req, res, render = false) {
   try {
     const { id } = req.params;
-    const datosActualizados = req.body;
+    const { nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos } = req.body;
+
+    // Procesar los arrays
+    const datosActualizados = {
+      nombreSuperHeroe: nombreSuperHeroe.trim(),
+      nombreReal: nombreReal.trim(),
+      edad: parseInt(edad),
+      planetaOrigen: planetaOrigen.trim(),
+      debilidad: debilidad.trim(),
+      poderes: poderes.split(",").map((p) => p.trim()),
+      aliados: aliados ? aliados.split(",").map((a) => a.trim()) : [],
+      enemigos: enemigos ? enemigos.split(",").map((e) => e.trim()) : [],
+    };
 
     const superheroe = await actualizarSuperheroe(id, datosActualizados);
     if (!superheroe) {
@@ -67,7 +79,7 @@ export async function actualizarSuperheroeController(req, res, render = false) {
     }
 
     if (render) {
-      return superheroe; // Devuelve el objeto si se llama desde otra función
+      return superheroe;
     } else {
       res.json({
         mensaje: "Superhéroe actualizado con éxito",
